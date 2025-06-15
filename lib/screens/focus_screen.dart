@@ -18,6 +18,7 @@ class FocusScreen extends StatefulWidget {
 }
 
 class _FocusScreenState extends State<FocusScreen> {
+  late PlayerState _playerState;
   int points = 0;
   int lastPoints = 0;
   bool isSessionActive = false;
@@ -26,24 +27,27 @@ class _FocusScreenState extends State<FocusScreen> {
   @override
   void initState() {
     super.initState();
-    points = widget.state.score;
+    _playerState = widget.state;
+    points = widget.state.totalPoints;
   }
 
-  void _onFocusCompleted(Duration duration) {
+  Future<void> _onFocusCompleted(Duration duration) async {
+    final earnedPoints = 10 * duration.inMinutes;
+
+    // Update points locally first
     setState(() {
-      lastPoints +=
-          10 *
-          duration
-              .inMinutes; //(duration.inMinutes ~/ 5); // 10 points per 5 minutes
-      points += lastPoints;
+      lastPoints = earnedPoints;
+      points += earnedPoints;
       isSessionActive = false;
     });
 
+    // 🧠 Show the dialog BEFORE the await
+    if (!mounted) return;
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Great job!'),
-        content: Text('You earned $lastPoints points.'),
+        content: Text('You earned $earnedPoints points.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -53,12 +57,12 @@ class _FocusScreenState extends State<FocusScreen> {
       ),
     );
 
-    // Save updated player state
-    final PlayerState new_state = PlayerState(
-      level: widget.state.level,
-      score: points,
-    );
-    savePlayerState(new_state);
+    final updated = await _playerState.addPoints(earnedPoints);
+    if (!mounted) return;
+    setState(() {
+      _playerState = updated;
+      points = updated.totalPoints;
+    });
   }
 
   void _showTimePickerModal() {
@@ -89,7 +93,9 @@ class _FocusScreenState extends State<FocusScreen> {
             icon: const Icon(Icons.bar_chart),
             onPressed: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => StatisticsScreen()),
+              MaterialPageRoute(
+                builder: (context) => StatisticsScreen(state: _playerState),
+              ),
             ),
           ),
           IconButton(

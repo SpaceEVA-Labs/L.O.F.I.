@@ -6,7 +6,7 @@ import 'theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final playerState = await loadPlayerState() ?? PlayerState.initial();
+  final playerState = await PlayerState.load();
 
   runApp(FocusVioletApp(initialState: playerState));
 }
