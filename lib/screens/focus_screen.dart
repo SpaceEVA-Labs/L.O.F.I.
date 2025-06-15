@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wave/wave.dart';
 import 'package:wave/config.dart';
 
+import 'statistics_screen.dart';
 import 'achievements_screen.dart';
 import '../player_state.dart';
 import '../widgets/focus_timer.dart';
@@ -85,8 +86,11 @@ class _FocusScreenState extends State<FocusScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.library_music),
-            onPressed: () => print("Music tapped"),
+            icon: const Icon(Icons.bar_chart),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => StatisticsScreen()),
+            ),
           ),
           IconButton(
             icon: const Icon(Icons.emoji_events),
