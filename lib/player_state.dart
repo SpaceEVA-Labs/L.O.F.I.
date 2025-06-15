@@ -16,7 +16,7 @@ class PlayerState {
   static Future<PlayerState> load() async {
     final prefs = await SharedPreferences.getInstance();
 
-    final total = prefs.getInt('total_points');
+    final total = prefs.getInt(_totalKey);
     final dailyJson = prefs.getString('daily_points');
     final daily = dailyJson != null
         ? Map<String, int>.from(json.decode(dailyJson))
