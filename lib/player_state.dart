@@ -31,7 +31,7 @@ class PlayerState {
     await prefs.setInt(_totalKey, totalPoints);
     await prefs.setString(_dailyKey, json.encode(dailyPoints));
 
-    log("✅ Saved: $totalPoints - $dailyPoints", name: 'PlayerState'); // for debug
+    print("✅ Saved: $totalPoints - $dailyPoints"); // for debug
   }
 
   /// Add points and return a new PlayerState
