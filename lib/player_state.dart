@@ -7,6 +7,11 @@ class PlayerState {
 
   PlayerState({required this.totalPoints, required this.dailyPoints});
 
+  // Use a named factory constructor instead of a default one
+  factory PlayerState.empty() {
+    return PlayerState(totalPoints: 0, dailyPoints: {});
+  }
+
   factory PlayerState.initial() => PlayerState(totalPoints: 0, dailyPoints: {});
 
   static const _totalKey = 'total_points';
@@ -17,10 +22,18 @@ class PlayerState {
     final prefs = await SharedPreferences.getInstance();
 
     final total = prefs.getInt(_totalKey);
-    final dailyJson = prefs.getString('daily_points');
-    final daily = dailyJson != null
-        ? Map<String, int>.from(json.decode(dailyJson))
-        : <String, int>{};
+    final dailyJson = prefs.getString(_dailyKey); // Fixed key name here
+
+    Map<String, int> daily = {};
+    if (dailyJson != null) {
+      try {
+        final decoded = json.decode(dailyJson);
+        daily = Map<String, int>.from(decoded);
+      } catch (e) {
+        print("Error decoding daily points: $e");
+        // Continue with empty map if there's an error
+      }
+    }
 
     return PlayerState(totalPoints: total ?? 0, dailyPoints: daily);
   }
