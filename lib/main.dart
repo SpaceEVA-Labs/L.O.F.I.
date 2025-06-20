@@ -6,19 +6,20 @@ import 'player_state.dart';
 import 'theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
+  // Ensure Flutter is initialized
   WidgetsFlutterBinding.ensureInitialized();
 
   // Apply fixes for fl_chart package
   _applyFlChartFix();
 
   // Set preferred orientations
-  SystemChrome.setPreferredOrientations([
+  await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
-  ]).then((_) {
-    runApp(const MyApp());
-  });
+  ]);
+
+  runApp(const MyApp());
 }
 
 /// Apply fixes for the fl_chart package
@@ -38,14 +39,22 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late ThemeOption _currentThemeOption;
   late PlayerState _playerState;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
     _currentThemeOption = themeOptions[0]; // Default to first theme
     _playerState = PlayerState.empty(); // Use the named constructor
-    _loadSavedTheme();
-    _loadPlayerState();
+    _initializeApp();
+  }
+
+  Future<void> _initializeApp() async {
+    await _loadSavedTheme();
+    await _loadPlayerState();
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   Future<void> _loadSavedTheme() async {
@@ -78,16 +87,28 @@ class _MyAppState extends State<MyApp> {
       print(
         "✅ Loaded player state: ${loadedState.totalPoints} points, ${loadedState.dailyPoints.length} days",
       );
+
+      // Save the state immediately to ensure it's properly stored
+      loadedState.save();
     } catch (e) {
       print("❌ Error loading player state: $e");
       setState(() {
         _playerState = PlayerState.empty();
       });
+      // Save the empty state to initialize storage
+      _playerState.save();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(body: Center(child: CircularProgressIndicator())),
+      );
+    }
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: _currentThemeOption.theme,
@@ -95,6 +116,11 @@ class _MyAppState extends State<MyApp> {
         state: _playerState,
         themeOption: _currentThemeOption,
         onThemeChanged: _updateTheme,
+        onStateChanged: (PlayerState newState) {
+          setState(() {
+            _playerState = newState;
+          });
+        },
       ),
     );
   }

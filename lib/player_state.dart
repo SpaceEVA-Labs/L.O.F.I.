@@ -22,13 +22,16 @@ class PlayerState {
     final prefs = await SharedPreferences.getInstance();
 
     final total = prefs.getInt(_totalKey);
-    final dailyJson = prefs.getString(_dailyKey); // Fixed key name here
+    final dailyJson = prefs.getString(_dailyKey);
 
     Map<String, int> daily = {};
     if (dailyJson != null) {
       try {
         final decoded = json.decode(dailyJson);
-        daily = Map<String, int>.from(decoded);
+        // Convert the decoded map to the correct type
+        daily = Map<String, int>.from(
+          decoded.map((key, value) => MapEntry(key, value as int)),
+        );
       } catch (e) {
         print("Error decoding daily points: $e");
         // Continue with empty map if there's an error
@@ -42,7 +45,10 @@ class PlayerState {
   Future<void> save() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_totalKey, totalPoints);
-    await prefs.setString(_dailyKey, json.encode(dailyPoints));
+
+    // Ensure we're encoding a valid Map<String, int>
+    final encodedDaily = json.encode(dailyPoints);
+    await prefs.setString(_dailyKey, encodedDaily);
 
     print("✅ Saved: $totalPoints - $dailyPoints"); // for debug
   }

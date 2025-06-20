@@ -16,12 +16,14 @@ class FocusScreen extends StatefulWidget {
   final PlayerState state;
   final ThemeOption themeOption;
   final Function(ThemeOption) onThemeChanged;
+  final Function(PlayerState)? onStateChanged;
 
   const FocusScreen({
     super.key,
     required this.state,
     required this.themeOption,
     required this.onThemeChanged,
+    this.onStateChanged,
   });
 
   @override
@@ -94,6 +96,9 @@ class _FocusScreenState extends State<FocusScreen> {
       points = updated.totalPoints;
       _updateDailyPoints();
     });
+
+    // Notify parent about state change
+    widget.onStateChanged?.call(updated);
   }
 
   void _showTimePickerModal() {
@@ -268,7 +273,7 @@ class _FocusScreenState extends State<FocusScreen> {
                               )
                             else
                               Text(
-                                'Tanimoto: ${currentTimerSettings!.focusDuration.inMinutes}m focus / ${currentTimerSettings!.pauseDuration.inMinutes}m pause × ${currentTimerSettings!.repetitions}',
+                                'Pomodoro: ${currentTimerSettings!.focusDuration.inMinutes}m focus / ${currentTimerSettings!.pauseDuration.inMinutes}m pause × ${currentTimerSettings!.repetitions}',
                                 textAlign: TextAlign.center,
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),

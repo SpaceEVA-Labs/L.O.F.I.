@@ -194,7 +194,7 @@ Future<void> showFocusDurationModal({
                               Expanded(
                                 child: Slider(
                                   value: focusDuration.inMinutes.toDouble(),
-                                  min: 5,
+                                  min: 1,
                                   max: 60, // 1 hour
                                   divisions: 55,
                                   label: '${focusDuration.inMinutes} min',
