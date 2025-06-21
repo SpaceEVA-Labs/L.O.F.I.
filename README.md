@@ -23,9 +23,9 @@
   <img src="docs/screenshots/pomodoro_timer.png" alt="Achievements Screen" width="220" style="margin: 10px;"/>
   <img src="docs/screenshots/pomodoro_active.png" alt="Todo List Screen" width="220" style="margin: 10px;"/>
   <img src="docs/screenshots/themes.png" alt="Theme Selection Screen" width="220" style="margin: 10px;"/>
-  <img src="docs/screenshots/statistics.png" alt="Theme Selection Screen" width="220" style="margin: 10px;"/>
-  <img src="docs/screenshots/todolist.png.png" alt="Theme Selection Screen" width="220" style="margin: 10px;"/>
-  <img src="docs/screenshots/about.png.png" alt="Theme Selection Screen" width="220" style="margin: 10px;"/>
+  <img src="docs/screenshots/statistics.png" alt="Statistics Screen" width="220" style="margin: 10px;"/>
+  <img src="docs/screenshots/todolist.png" alt="Todo List Screen" width="220" style="margin: 10px;"/>
+  <img src="docs/screenshots/about.png" alt="About Screen" width="220" style="margin: 10px;"/>
 </div>
 
 ---
