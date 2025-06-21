@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'utils/chart_utils_fix.dart';
 import 'screens/focus_screen.dart';
+import 'screens/splash_screen.dart';
 import 'player_state.dart';
 import 'theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,6 +41,7 @@ class _MyAppState extends State<MyApp> {
   late ThemeOption _currentThemeOption;
   late PlayerState _playerState;
   bool _isLoading = true;
+  bool _showSplash = true;
 
   @override
   void initState() {
@@ -54,6 +56,15 @@ class _MyAppState extends State<MyApp> {
     await _loadPlayerState();
     setState(() {
       _isLoading = false;
+    });
+
+    // Shorter delay for splash screen to minimize double splash effect
+    Future.delayed(const Duration(milliseconds: 800), () {
+      if (mounted) {
+        setState(() {
+          _showSplash = false;
+        });
+      }
     });
   }
 
@@ -112,16 +123,24 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: _currentThemeOption.theme,
-      home: FocusScreen(
-        state: _playerState,
-        themeOption: _currentThemeOption,
-        onThemeChanged: _updateTheme,
-        onStateChanged: (PlayerState newState) {
-          setState(() {
-            _playerState = newState;
-          });
-        },
-      ),
+      home: _showSplash
+          ? SplashScreen(
+              onComplete: () {
+                setState(() {
+                  _showSplash = false;
+                });
+              },
+            )
+          : FocusScreen(
+              state: _playerState,
+              themeOption: _currentThemeOption,
+              onThemeChanged: _updateTheme,
+              onStateChanged: (PlayerState newState) {
+                setState(() {
+                  _playerState = newState;
+                });
+              },
+            ),
     );
   }
 }

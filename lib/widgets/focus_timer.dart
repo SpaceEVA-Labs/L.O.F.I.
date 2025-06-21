@@ -44,7 +44,7 @@ class _FocusTimerState extends State<FocusTimer> {
     timer = Timer.periodic(const Duration(seconds: 1), (t) {
       if (remainingSeconds == 0) {
         // Handle interval completion
-        if (widget.settings.type == TimerType.tanimoto) {
+        if (widget.settings.type == TimerType.pomodoro) {
           if (isPause) {
             // Pause interval completed
             currentInterval++;
@@ -105,7 +105,7 @@ class _FocusTimerState extends State<FocusTimer> {
             color: isPause ? Colors.orange : Colors.white,
           ),
         ),
-        if (widget.settings.type == TimerType.tanimoto) ...[
+        if (widget.settings.type == TimerType.pomodoro) ...[
           const SizedBox(height: 8),
           Text(
             isPause ? 'PAUSE' : 'FOCUS',

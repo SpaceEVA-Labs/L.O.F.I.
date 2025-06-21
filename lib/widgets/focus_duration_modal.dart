@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum TimerType { standard, tanimoto }
+enum TimerType { standard, pomodoro }
 
 class TimerSettings {
   final TimerType type;
@@ -109,13 +109,13 @@ Future<void> showFocusDurationModal({
                     Expanded(
                       child: _buildSelectionCard(
                         context: context,
-                        title: 'Tanimoto',
+                        title: 'Pomodoro',
                         description: 'Alternating focus and pause intervals',
                         icon: Icons.repeat,
-                        isSelected: selectedType == TimerType.tanimoto,
+                        isSelected: selectedType == TimerType.pomodoro,
                         onTap: () {
                           setModalState(() {
-                            selectedType = TimerType.tanimoto;
+                            selectedType = TimerType.pomodoro;
                           });
                         },
                       ),
@@ -176,8 +176,8 @@ Future<void> showFocusDurationModal({
                             ),
                           ),
                         ]
-                        // Tanimoto Timer Settings
-                        else if (selectedType == TimerType.tanimoto) ...[
+                        // Pomodoro Timer Settings
+                        else if (selectedType == TimerType.pomodoro) ...[
                           // Focus Interval
                           const Text(
                             'Focus Interval',

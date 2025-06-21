@@ -6,6 +6,7 @@ import 'package:wave/config.dart';
 import 'statistics_screen.dart';
 import 'achievements_screen.dart';
 import 'theme_customization_screen.dart';
+import 'todo_list_screen.dart';
 import '../player_state.dart';
 import '../widgets/focus_timer.dart';
 import '../widgets/focus_duration_modal.dart';
@@ -53,6 +54,20 @@ class _FocusScreenState extends State<FocusScreen> {
     final today = DateTime.now().toIso8601String().split('T')[0];
     dailyPoints = _playerState.dailyPoints[today] ?? 0;
   }
+
+  // Convert points to time string (10 points = 1 minute)
+  String _pointsToTimeString(int points) {
+    final minutes = (points / 10).round();
+    final hours = minutes ~/ 60;
+    final mins = minutes % 60;
+    return hours > 0 ? '${hours}h ${mins}m' : '${mins}m';
+  }
+
+  // Get total focus time as string
+  String get _totalFocusTime => _pointsToTimeString(points);
+
+  // Get today's focus time as string
+  String get _todaysFocusTime => _pointsToTimeString(dailyPoints);
 
   Future<void> _onFocusCompleted(Duration focusDuration) async {
     final earnedPoints = 10 * focusDuration.inMinutes;
@@ -145,6 +160,13 @@ class _FocusScreenState extends State<FocusScreen> {
         title: const Text('L.O.F.I'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.checklist),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const TodoListScreen()),
+            ),
+          ),
+          IconButton(
             icon: const Icon(Icons.bar_chart),
             onPressed: () => Navigator.push(
               context,
@@ -167,7 +189,7 @@ class _FocusScreenState extends State<FocusScreen> {
             onPressed: _openThemeCustomization,
           ),
           IconButton(
-            icon: const Icon(Icons.settings),
+            icon: const Icon(Icons.info_outline),
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const AboutScreen()),
@@ -220,31 +242,96 @@ class _FocusScreenState extends State<FocusScreen> {
                             padding: const EdgeInsets.all(16.0),
                             child: Column(
                               children: [
-                                Text(
-                                  'Total Points',
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.bodyMedium,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Total Points',
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium,
+                                        ),
+                                        Text(
+                                          '$points',
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.headlineMedium,
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          'Total Focus',
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium,
+                                        ),
+                                        Text(
+                                          _totalFocusTime,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  '$points',
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.headlineMedium,
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  'Today\'s Points',
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                                Text(
-                                  '$dailyPoints',
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium
-                                      ?.copyWith(fontSize: 24),
+                                const Divider(height: 24),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Today\'s Points',
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium,
+                                        ),
+                                        Text(
+                                          '$dailyPoints',
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.headlineSmall,
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          'Today\'s Focus',
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium,
+                                        ),
+                                        Text(
+                                          _todaysFocusTime,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
