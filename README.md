@@ -1,6 +1,6 @@
 # 🌙 L.O.F.I – *Learn. Organize. Focus. Improve.*
 
-![L.O.F.I Logo](/docs/logo/logo.png)
+<img src="docs/logo/logo.png" alt="L.O.F.I Logo" width="200"/>
 
 **L.O.F.I** is a lofi-themed educational and productivity app that helps you stay focused and motivated while studying or working. With calming aesthetics and useful features, it turns focus into fun.
 
@@ -17,15 +17,13 @@
 
 ## 📱 Screenshots
 
-<div style="display: flex; overflow-x: auto; gap: 10px; padding: 10px 0;">
-  <img src="/docs/screenshots/focus_screen.png" alt="Focus Screen" width="220"/>
-  <img src="/docs/screenshots/stats_screen.png" alt="Statistics Screen" width="220"/>
-  <img src="/docs/screenshots/achievements_screen.png" alt="Achievements Screen" width="220"/>
-  <img src="/docs/screenshots/todo_screen.png" alt="Todo List Screen" width="220"/>
-  <img src="/docs/screenshots/theme_screen.png" alt="Theme Selection Screen" width="220"/>
+<div align="center">
+  <img src="docs/screenshots/focus_screen.png" alt="Focus Screen" width="220" style="margin: 10px;"/>
+  <img src="docs/screenshots/stats_screen.png" alt="Statistics Screen" width="220" style="margin: 10px;"/>
+  <img src="docs/screenshots/achievements_screen.png" alt="Achievements Screen" width="220" style="margin: 10px;"/>
+  <img src="docs/screenshots/todo_screen.png" alt="Todo List Screen" width="220" style="margin: 10px;"/>
+  <img src="docs/screenshots/theme_screen.png" alt="Theme Selection Screen" width="220" style="margin: 10px;"/>
 </div>
-
-*Swipe left/right to see more screenshots*
 
 ---
 
