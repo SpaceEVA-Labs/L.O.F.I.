@@ -203,22 +203,19 @@ class _FocusScreenState extends State<FocusScreen> {
         child: Stack(
           children: [
             // Wave animation background
-            RepaintBoundary(
-              child: Positioned.fill(
-                child: WaveWidget(
-                  config: CustomConfig(
-                    gradients: _currentTheme.waveGradients,
-                    durations: const [30000],
-                    heightPercentages: const [0.5],
-                    blur: const MaskFilter.blur(BlurStyle.solid, 1),
-                    gradientBegin: Alignment.bottomLeft,
-                    gradientEnd: Alignment.topRight,
-                  ),
-                  backgroundColor: _currentTheme.waveBackground,
-                  waveAmplitude: 10,
-                  size: screenSize,
-                ),
+            // Fixed: Replaced RepaintBoundary+Positioned with just WaveWidget
+            WaveWidget(
+              config: CustomConfig(
+                gradients: _currentTheme.waveGradients,
+                durations: const [30000],
+                heightPercentages: const [0.5],
+                blur: const MaskFilter.blur(BlurStyle.solid, 1),
+                gradientBegin: Alignment.bottomLeft,
+                gradientEnd: Alignment.topRight,
               ),
+              backgroundColor: _currentTheme.waveBackground,
+              waveAmplitude: 10,
+              size: screenSize,
             ),
 
             // Main focus UI
