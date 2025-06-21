@@ -17,7 +17,15 @@
 
 ## 📱 Screenshots
 
-*Coming soon!*
+<div style="display: flex; overflow-x: auto; gap: 10px; padding: 10px 0;">
+  <img src="/docs/screenshots/focus_screen.png" alt="Focus Screen" width="220"/>
+  <img src="/docs/screenshots/stats_screen.png" alt="Statistics Screen" width="220"/>
+  <img src="/docs/screenshots/achievements_screen.png" alt="Achievements Screen" width="220"/>
+  <img src="/docs/screenshots/todo_screen.png" alt="Todo List Screen" width="220"/>
+  <img src="/docs/screenshots/theme_screen.png" alt="Theme Selection Screen" width="220"/>
+</div>
+
+*Swipe left/right to see more screenshots*
 
 ---
 
@@ -37,4 +45,10 @@ flutter run
 ## 🤝 Contributing
 
 Pull requests and feature suggestions are welcome!
-Let’s build a mindful productivity space together.
+Let's build a mindful productivity space together.
+
+Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing to the project.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
