@@ -18,11 +18,14 @@
 ## 📱 Screenshots
 
 <div align="center">
-  <img src="docs/screenshots/focus_screen.png" alt="Focus Screen" width="220" style="margin: 10px;"/>
-  <img src="docs/screenshots/stats_screen.png" alt="Statistics Screen" width="220" style="margin: 10px;"/>
-  <img src="docs/screenshots/achievements_screen.png" alt="Achievements Screen" width="220" style="margin: 10px;"/>
-  <img src="docs/screenshots/todo_screen.png" alt="Todo List Screen" width="220" style="margin: 10px;"/>
-  <img src="docs/screenshots/theme_screen.png" alt="Theme Selection Screen" width="220" style="margin: 10px;"/>
+  <img src="docs/screenshots/home.png" alt="Focus Screen" width="220" style="margin: 10px;"/>
+  <img src="docs/screenshots/standard-timer.png" alt="Statistics Screen" width="220" style="margin: 10px;"/>
+  <img src="docs/screenshots/pomodoro_timer.png" alt="Achievements Screen" width="220" style="margin: 10px;"/>
+  <img src="docs/screenshots/pomodoro_active.png" alt="Todo List Screen" width="220" style="margin: 10px;"/>
+  <img src="docs/screenshots/themes.png" alt="Theme Selection Screen" width="220" style="margin: 10px;"/>
+  <img src="docs/screenshots/statistics.png" alt="Theme Selection Screen" width="220" style="margin: 10px;"/>
+  <img src="docs/screenshots/todolist.png.png" alt="Theme Selection Screen" width="220" style="margin: 10px;"/>
+  <img src="docs/screenshots/about.png.png" alt="Theme Selection Screen" width="220" style="margin: 10px;"/>
 </div>
 
 ---
@@ -32,8 +35,8 @@
 Clone the repository and run the app using Flutter:
 
 ```bash
-git clone https://github.com/yourusername/lofi-app.git
-cd lofi-app
+git clone git@github.com:SpaceEVA-Labs/L.O.F.I..git
+cd lofi
 flutter pub get
 flutter run
 ```
