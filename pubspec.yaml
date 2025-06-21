@@ -30,39 +30,43 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.8
-  wave: ^0.2.0
-  shared_preferences: ^2.2.2
+  cupertino_icons: ^1.0.2
+  wave: ^0.2.2
+  shared_preferences: ^2.0.15
+  fl_chart: ^0.68.0
+  url_launcher: ^6.1.5
+  uuid: ^3.0.7
+  intl: ^0.18.1  # Add this line for date formatting
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^2.0.0
+  # flutter_native_splash: ^2.3.10  # Commented out
 
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
-  flutter_lints: ^5.0.0
+# Remove the flutter_native_splash configuration
+# flutter_native_splash:
+#   color: "#ffffff"
+#   image: docs/logo/logo.png
+#   color_dark: "#121212"
+#   image_dark: docs/logo/logo.png
+#   android: true
+#   ios: true
+#   web: false
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - docs/logo/logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

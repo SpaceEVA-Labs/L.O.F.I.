@@ -2,38 +2,68 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PlayerState {
-  final int level;
-  final int score;
+  final int totalPoints;
+  final Map<String, int> dailyPoints;
 
-  PlayerState({required this.level, required this.score});
+  PlayerState({required this.totalPoints, required this.dailyPoints});
 
-  static PlayerState initial() {
-    return PlayerState(level: 1, score: 0);
+  // Use a named factory constructor instead of a default one
+  factory PlayerState.empty() {
+    return PlayerState(totalPoints: 0, dailyPoints: {});
   }
 
-  Map<String, dynamic> toJson() {
-    return {'level': level, 'score': score};
+  factory PlayerState.initial() => PlayerState(totalPoints: 0, dailyPoints: {});
+
+  static const _totalKey = 'total_points';
+  static const _dailyKey = 'daily_points';
+
+  /// Load state from shared preferences
+  static Future<PlayerState> load() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final total = prefs.getInt(_totalKey);
+    final dailyJson = prefs.getString(_dailyKey);
+
+    Map<String, int> daily = {};
+    if (dailyJson != null) {
+      try {
+        final decoded = json.decode(dailyJson);
+        // Convert the decoded map to the correct type
+        daily = Map<String, int>.from(
+          decoded.map((key, value) => MapEntry(key, value as int)),
+        );
+      } catch (e) {
+        print("Error decoding daily points: $e");
+        // Continue with empty map if there's an error
+      }
+    }
+
+    return PlayerState(totalPoints: total ?? 0, dailyPoints: daily);
   }
 
-  static PlayerState fromJson(Map<String, dynamic> json) {
-    return PlayerState(
-      level: json['level'] as int,
-      score: json['score'] as int,
+  /// Save current state to shared preferences
+  Future<void> save() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_totalKey, totalPoints);
+
+    // Ensure we're encoding a valid Map<String, int>
+    final encodedDaily = json.encode(dailyPoints);
+    await prefs.setString(_dailyKey, encodedDaily);
+
+    print("✅ Saved: $totalPoints - $dailyPoints"); // for debug
+  }
+
+  /// Add points and return a new PlayerState
+  Future<PlayerState> addPoints(int amount) async {
+    final today = DateTime.now().toIso8601String().split('T')[0];
+    final updatedDaily = Map<String, int>.from(dailyPoints);
+    updatedDaily[today] = (updatedDaily[today] ?? 0) + amount;
+
+    final newState = PlayerState(
+      totalPoints: totalPoints + amount,
+      dailyPoints: updatedDaily,
     );
+    await newState.save();
+    return newState;
   }
-}
-
-Future<void> savePlayerState(PlayerState state) async {
-  final prefs = await SharedPreferences.getInstance();
-  final jsonString = jsonEncode(state.toJson());
-  await prefs.setString('player_state', jsonString);
-}
-
-Future<PlayerState?> loadPlayerState() async {
-  final prefs = await SharedPreferences.getInstance();
-  final jsonString = prefs.getString('player_state');
-  if (jsonString == null) return null;
-
-  final json = jsonDecode(jsonString);
-  return PlayerState.fromJson(json);
 }
