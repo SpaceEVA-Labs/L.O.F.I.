@@ -78,7 +78,7 @@ class AboutScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      'Thank you for using L.O.F.I - Learning Over Focused Intervals. This app was created to help you stay focused and productive while enjoying lofi beats. Your support means a lot!',
+                      'Thank you for using L.O.F.I - Learn. Organize. Focus. Improve. This app was created to help you stay focused and productive while enjoying lofi beats. Your support means a lot!',
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 14),
                     ),
