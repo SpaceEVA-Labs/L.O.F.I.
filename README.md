@@ -22,6 +22,7 @@
   <img src="docs/screenshots/standard-timer.png" alt="Statistics Screen" width="220" style="margin: 10px;"/>
   <img src="docs/screenshots/pomodoro_timer.png" alt="Achievements Screen" width="220" style="margin: 10px;"/>
   <img src="docs/screenshots/pomodoro_active.png" alt="Todo List Screen" width="220" style="margin: 10px;"/>
+  <img src="docs/screenshots/music.png" alt="Music Screen" width="220" style="margin: 10px;"/>
   <img src="docs/screenshots/themes.png" alt="Theme Selection Screen" width="220" style="margin: 10px;"/>
   <img src="docs/screenshots/statistics.png" alt="Statistics Screen" width="220" style="margin: 10px;"/>
   <img src="docs/screenshots/todolist.png" alt="Todo List Screen" width="220" style="margin: 10px;"/>

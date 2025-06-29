@@ -7,6 +7,7 @@ import 'statistics_screen.dart';
 import 'achievements_screen.dart';
 import 'theme_customization_screen.dart';
 import 'todo_list_screen.dart';
+import 'music_screen.dart';
 import '../player_state.dart';
 import '../widgets/focus_timer.dart';
 import '../widgets/focus_duration_modal.dart';
@@ -159,6 +160,13 @@ class _FocusScreenState extends State<FocusScreen> {
       appBar: AppBar(
         title: const Text('L.O.F.I'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.music_note),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const MusicScreen()),
+            ),
+          ),
           IconButton(
             icon: const Icon(Icons.checklist),
             onPressed: () => Navigator.push(
