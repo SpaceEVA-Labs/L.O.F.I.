@@ -57,8 +57,8 @@ We may update our Privacy Policy from time to time. We will notify you of any ch
 
 If you have any questions about this Privacy Policy, please contact us at:
 
-- Email: [contact@lofiapp.example.com](spaceevalabs@gmail.com)
-- GitHub: [https://github.com/yourusername/lofi-app/issues](https://github.com/SpaceEVA-Labs/L.O.F.I./issues)
+- Email: [spaceevalabs@gmail.com](spaceevalabs@gmail.com)
+- GitHub: [https://github.com/SpaceEVA-Labs/L.O.F.I./issues](https://github.com/SpaceEVA-Labs/L.O.F.I./issues)
 
 ## Your Consent
 
