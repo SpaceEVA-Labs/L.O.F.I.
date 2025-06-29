@@ -6,6 +6,7 @@ import 'screens/splash_screen.dart';
 import 'player_state.dart';
 import 'theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'services/audio_service.dart';
 
 void main() async {
   // Ensure Flutter is initialized
@@ -13,6 +14,9 @@ void main() async {
 
   // Apply fixes for fl_chart package
   _applyFlChartFix();
+
+  // Initialize audio service
+  await AudioService().initialize();
 
   // Set preferred orientations
   await SystemChrome.setPreferredOrientations([
