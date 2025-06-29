@@ -26,7 +26,7 @@ android {
         applicationId = "com.spaceevalabs.lofi"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
-        versionCode = 1  // Increment this with each release
+        versionCode = flutter.versionCode  // Dynamically synced with pubspec.yaml
         versionName = "1.0.0"  // Semantic versioning
     }
 
