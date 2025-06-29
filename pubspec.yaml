@@ -42,17 +42,18 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
-  # flutter_native_splash: ^2.3.10  # Commented out
+  flutter_launcher_icons: ^0.13.1
 
-# Remove the flutter_native_splash configuration
-# flutter_native_splash:
-#   color: "#ffffff"
-#   image: docs/logo/logo.png
-#   color_dark: "#121212"
-#   image_dark: docs/logo/logo.png
-#   android: true
-#   ios: true
-#   web: false
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "docs/logo/logo.png"
+  web:
+    generate: true
+  windows:
+    generate: true
+  macos:
+    generate: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
