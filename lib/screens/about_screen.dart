@@ -113,7 +113,7 @@ class AboutScreen extends StatelessWidget {
                 description: 'Suggest new features or report bugs',
                 icon: Icons.lightbulb,
                 onTap: () =>
-                    _launchUrl('https://github.com/L-I-B-R-E/L.I.B.R.E'),
+                    _launchUrl('https://github.com/SpaceEVA-Labs/L.O.F.I.'),
               ),
               const SizedBox(height: 12),
 
@@ -131,12 +131,12 @@ class AboutScreen extends StatelessWidget {
 
               // Version info
               Text(
-                'Version 1.0.0',
+                'Version 1.2.0',
                 style: TextStyle(color: Colors.grey[600], fontSize: 14),
               ),
               const SizedBox(height: 8),
               Text(
-                '© 2025 LofiFocus',
+                '© 2025 SpaceEVA-Labs',
                 style: TextStyle(color: Colors.grey[600], fontSize: 14),
               ),
             ],
