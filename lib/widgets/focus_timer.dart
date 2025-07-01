@@ -108,6 +108,14 @@ class _FocusTimerState extends State<FocusTimer> with WidgetsBindingObserver {
         // Add to total focus duration
         totalFocusDuration += widget.settings.focusDuration;
 
+        // Check if this was the last focus interval
+        if (currentInterval == widget.settings.repetitions) {
+          // Last focus interval completed, end the timer
+          timer?.cancel();
+          widget.onCompleted(totalFocusDuration);
+          return;
+        }
+
         // Start pause interval
         setState(() {
           isPause = true;
