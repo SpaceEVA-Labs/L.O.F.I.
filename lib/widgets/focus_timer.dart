@@ -25,6 +25,7 @@ class _FocusTimerState extends State<FocusTimer> with WidgetsBindingObserver {
   int currentInterval = 1;
   late Duration totalFocusDuration;
   DateTime? _endTime; // When timer should end
+  int? _pausedTimeRemaining; // Store remaining seconds when paused
 
   @override
   void initState() {
@@ -137,10 +138,67 @@ class _FocusTimerState extends State<FocusTimer> with WidgetsBindingObserver {
     super.dispose();
   }
 
+  void _pauseTimer() {
+    if (timer?.isActive == true) {
+      timer?.cancel();
+      setState(() {
+        // Save the current end time for later resuming
+        _pausedTimeRemaining = remainingSeconds;
+      });
+    }
+  }
+
+  void _resumeTimer() {
+    if (timer?.isActive != true && _pausedTimeRemaining != null) {
+      // Recalculate end time based on remaining time
+      _endTime = DateTime.now().add(Duration(seconds: _pausedTimeRemaining!));
+      startTimer();
+    }
+  }
+
+  void _breakTimer() {
+    // Calculate how much time was spent focusing
+    Duration focusedTime;
+
+    if (widget.settings.type == TimerType.standard) {
+      // For standard timer: calculate time spent based on original duration minus remaining time
+      focusedTime =
+          widget.settings.focusDuration - Duration(seconds: remainingSeconds);
+    } else {
+      // For pomodoro: calculate based on completed intervals and current progress
+      int completedFocusIntervals = currentInterval - 1;
+      if (!isPause) {
+        // Add partial progress from current focus interval
+        Duration currentIntervalProgress =
+            widget.settings.focusDuration - Duration(seconds: remainingSeconds);
+        focusedTime =
+            Duration(
+              seconds:
+                  completedFocusIntervals *
+                  widget.settings.focusDuration.inSeconds,
+            ) +
+            currentIntervalProgress;
+      } else {
+        // If in pause interval, just count completed focus intervals
+        focusedTime = Duration(
+          seconds:
+              completedFocusIntervals * widget.settings.focusDuration.inSeconds,
+        );
+      }
+    }
+
+    // Only award points if some time was spent focusing
+    if (focusedTime.inSeconds > 0) {
+      timer?.cancel();
+      widget.onCompleted(focusedTime);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final minutes = (remainingSeconds ~/ 60).toString().padLeft(2, '0');
     final seconds = (remainingSeconds % 60).toString().padLeft(2, '0');
+    final theme = Theme.of(context);
 
     return Column(
       children: [
@@ -148,7 +206,9 @@ class _FocusTimerState extends State<FocusTimer> with WidgetsBindingObserver {
           '$minutes:$seconds',
           style: TextStyle(
             fontSize: 48,
-            color: isPause ? Colors.orange : Colors.white,
+            color: isPause
+                ? theme.colorScheme.secondary
+                : theme.colorScheme.primary,
           ),
         ),
         if (widget.settings.type == TimerType.pomodoro) ...[
@@ -158,15 +218,49 @@ class _FocusTimerState extends State<FocusTimer> with WidgetsBindingObserver {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: isPause ? Colors.orange : Colors.white,
+              color: isPause
+                  ? theme.colorScheme.secondary
+                  : theme.colorScheme.primary,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             'Interval $currentInterval of ${widget.settings.repetitions}',
-            style: const TextStyle(fontSize: 14, color: Colors.white70),
+            style: TextStyle(
+              fontSize: 14,
+              color: theme.textTheme.bodyMedium?.color,
+            ),
           ),
         ],
+        const SizedBox(height: 24),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton.icon(
+              onPressed: timer?.isActive == true ? _pauseTimer : _resumeTimer,
+              icon: Icon(
+                timer?.isActive == true ? Icons.pause : Icons.play_arrow,
+              ),
+              label: Text(timer?.isActive == true ? 'Pause' : 'Continue'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: theme.cardColor,
+                foregroundColor: timer?.isActive == true
+                    ? theme.colorScheme.secondary
+                    : theme.colorScheme.primary,
+              ),
+            ),
+            const SizedBox(width: 16),
+            ElevatedButton.icon(
+              onPressed: _breakTimer,
+              icon: const Icon(Icons.stop),
+              label: const Text('Break'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: theme.cardColor,
+                foregroundColor: theme.colorScheme.error ?? Colors.red,
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
