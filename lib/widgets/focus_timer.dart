@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/focus_duration_modal.dart';
 
 class FocusTimer extends StatefulWidget {
@@ -16,78 +18,114 @@ class FocusTimer extends StatefulWidget {
   _FocusTimerState createState() => _FocusTimerState();
 }
 
-class _FocusTimerState extends State<FocusTimer> {
+class _FocusTimerState extends State<FocusTimer> with WidgetsBindingObserver {
   late int remainingSeconds;
   Timer? timer;
   bool isPause = false;
   int currentInterval = 1;
   late Duration totalFocusDuration;
+  DateTime? _endTime; // When timer should end
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     totalFocusDuration = Duration.zero;
 
     if (widget.settings.type == TimerType.standard) {
       remainingSeconds = widget.settings.focusDuration.inSeconds;
     } else {
-      // Start with focus interval
       remainingSeconds = widget.settings.focusDuration.inSeconds;
       isPause = false;
       currentInterval = 1;
     }
 
+    // Set end time based on current time + remaining seconds
+    _endTime = DateTime.now().add(Duration(seconds: remainingSeconds));
     startTimer();
   }
 
-  void startTimer() {
-    timer = Timer.periodic(const Duration(seconds: 1), (t) {
-      if (remainingSeconds == 0) {
-        // Handle interval completion
-        if (widget.settings.type == TimerType.pomodoro) {
-          if (isPause) {
-            // Pause interval completed
-            currentInterval++;
-
-            if (currentInterval > widget.settings.repetitions) {
-              // All intervals completed
-              timer?.cancel();
-              widget.onCompleted(totalFocusDuration);
-              return;
-            }
-
-            // Start next focus interval
-            setState(() {
-              isPause = false;
-              remainingSeconds = widget.settings.focusDuration.inSeconds;
-            });
-          } else {
-            // Focus interval completed
-            // Add to total focus duration
-            totalFocusDuration += widget.settings.focusDuration;
-
-            // Start pause interval
-            setState(() {
-              isPause = true;
-              remainingSeconds = widget.settings.pauseDuration.inSeconds;
-            });
-          }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // App came back to foreground - recalculate remaining time
+      if (_endTime != null) {
+        final now = DateTime.now();
+        if (now.isBefore(_endTime!)) {
+          // Timer still running
+          setState(() {
+            remainingSeconds = _endTime!.difference(now).inSeconds;
+          });
         } else {
-          // Standard timer completed
-          timer?.cancel();
-          widget.onCompleted(widget.settings.focusDuration);
+          // Timer completed while in background
+          handleTimerCompletion();
         }
+      }
+      startTimer(); // Restart the UI update timer
+    } else if (state == AppLifecycleState.paused) {
+      // App went to background - save state and stop UI timer
+      timer?.cancel();
+      // Save end time to SharedPreferences if needed for longer background periods
+    }
+  }
+
+  void startTimer() {
+    timer?.cancel();
+    timer = Timer.periodic(const Duration(seconds: 1), (t) {
+      final now = DateTime.now();
+      if (_endTime != null && now.isAfter(_endTime!)) {
+        handleTimerCompletion();
       } else {
         setState(() {
-          remainingSeconds--;
+          remainingSeconds = _endTime!.difference(now).inSeconds;
         });
       }
     });
   }
 
+  void handleTimerCompletion() {
+    // Handle interval completion logic
+    if (widget.settings.type == TimerType.pomodoro) {
+      if (isPause) {
+        // Pause interval completed
+        currentInterval++;
+
+        if (currentInterval > widget.settings.repetitions) {
+          // All intervals completed
+          timer?.cancel();
+          widget.onCompleted(totalFocusDuration);
+          return;
+        }
+
+        // Start next focus interval
+        setState(() {
+          isPause = false;
+          remainingSeconds = widget.settings.focusDuration.inSeconds;
+          _endTime = DateTime.now().add(Duration(seconds: remainingSeconds));
+        });
+      } else {
+        // Focus interval completed
+        // Add to total focus duration
+        totalFocusDuration += widget.settings.focusDuration;
+
+        // Start pause interval
+        setState(() {
+          isPause = true;
+          remainingSeconds = widget.settings.pauseDuration.inSeconds;
+          _endTime = DateTime.now().add(Duration(seconds: remainingSeconds));
+        });
+      }
+    } else {
+      // Standard timer completed
+      timer?.cancel();
+      widget.onCompleted(widget.settings.focusDuration);
+    }
+  }
+
   @override
   void dispose() {
     timer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
