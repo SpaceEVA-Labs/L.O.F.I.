@@ -365,7 +365,7 @@ class _FocusScreenState extends State<FocusScreen> {
                               )
                             else
                               Text(
-                                'Pomodoro: ${currentTimerSettings!.focusDuration.inMinutes}m focus / ${currentTimerSettings!.pauseDuration.inMinutes}m pause × ${currentTimerSettings!.repetitions}',
+                                'Pomodoro: ${currentTimerSettings!.focusDuration.inMinutes}m focus / ${currentTimerSettings!.pauseDuration.inMinutes}m pause × ${currentTimerSettings!.repetitions} (ends with focus)',
                                 textAlign: TextAlign.center,
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
